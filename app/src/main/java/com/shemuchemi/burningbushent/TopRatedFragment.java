@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.shemuchemi.burningbushent.adapter.TopRatedAdapter;
+import com.shemuchemi.burningbushent.adapter.MoviesAdapter;
 import com.shemuchemi.burningbushent.constants.Constants;
 import com.shemuchemi.burningbushent.model.Movie;
 import com.shemuchemi.burningbushent.model.MovieResponse;
@@ -43,7 +43,7 @@ public class TopRatedFragment extends Fragment {
                              Bundle savedInstanceState) {
         view =  inflater.inflate(R.layout.fragment_top_rated, container, false);
         recyclerView = view.findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
        connectAndGetApiData();
@@ -66,7 +66,7 @@ public class TopRatedFragment extends Fragment {
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
                 assert response.body() != null;
                 List<Movie> movies = response.body().getResults();
-                recyclerView.setAdapter(new TopRatedAdapter(movies, R.layout.list_item_movie, recyclerView.getContext()));
+                recyclerView.setAdapter(new MoviesAdapter(movies, R.layout.list_item_movie, recyclerView.getContext()));
                 Log.d(TAG, "Number of movies received: " + movies.size());
                 System.out.printf("\"Number of movies received: \" + movies.size()");
             }
