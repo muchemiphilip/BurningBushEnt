@@ -1,74 +1,52 @@
 package com.shemuchemi.burningbushent;
 
 import android.os.Bundle;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.shemuchemi.burningbushent.adapter.MoviesAdapter;
-import com.shemuchemi.burningbushent.constants.Constants;
-import com.shemuchemi.burningbushent.model.Movie;
-import com.shemuchemi.burningbushent.model.MovieResponse;
-import com.shemuchemi.burningbushent.rest.MovieApiService;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import androidx.viewpager.widget.ViewPager;
+import com.google.android.material.tabs.TabLayout;
+import com.shemuchemi.burningbushent.adapter.TabsAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static Retrofit retrofit = null;
-    private RecyclerView recyclerView = null;
+
+    TabLayout tabLayout;
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        connectAndGetApiData();
-    }
+        tabLayout= findViewById(R.id.tabLayout);
+        viewPager= findViewById(R.id.viewPager);
 
-    // This method create an instance of Retrofit
-    // set the base url
-    private void connectAndGetApiData() {
-        if (retrofit == null){
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(Constants.BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-        }
+        tabLayout.addTab(tabLayout.newTab().setText("Top Rated"));
+        tabLayout.addTab(tabLayout.newTab().setText("Trending"));
+        tabLayout.addTab(tabLayout.newTab().setText("Discover"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        MovieApiService movieApiService = retrofit.create(MovieApiService.class);
-        Call<MovieResponse> call = movieApiService.getTopRatedMovies(Constants.API_KEY);
-        call.enqueue(new Callback<MovieResponse>() {
+        final TabsAdapter adapter = new TabsAdapter(this,getSupportFragmentManager(),tabLayout.getTabCount());
+        viewPager.setAdapter(adapter);
 
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
-                assert response.body() != null;
-                List<Movie> movies = response.body().getResults();
-                recyclerView.setAdapter(new MoviesAdapter(movies, R.layout.list_item_movie, getApplicationContext()));
-                Log.d(TAG, "Number of movies received: " + movies.size());
-                System.out.printf("\"Number of movies received: \" + movies.size()");
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-                Log.e(TAG, t.toString());
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
     }
-
-
-
 }

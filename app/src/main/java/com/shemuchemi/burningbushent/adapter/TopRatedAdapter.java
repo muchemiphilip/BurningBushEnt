@@ -15,14 +15,14 @@ import com.shemuchemi.burningbushent.model.Movie;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 
-public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
+public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.MovieViewHolder> {
 
     private List<Movie> movies;
     private int rowLayout;
     private Context context;
     public static final String IMAGE_URL_BASE_PATH= "https://image.tmdb.org/t/p/w342//";
 
-    public MoviesAdapter(List<Movie> movies, int rowLayout, Context context) {
+    public TopRatedAdapter(List<Movie> movies, int rowLayout, Context context) {
         this.movies = movies;
         this.rowLayout = rowLayout;
         this.context = context;

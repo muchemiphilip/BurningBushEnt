@@ -68,7 +68,7 @@
                 android:layout_height="15dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/star"
-                app:tint="@color/colorAccent" />
+                app:tint="@color/orange" />
 
 
             <TextView
